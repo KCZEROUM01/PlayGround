@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#101a19" />
+  <title>VERDANT — Crônicas do Vale</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Marcellus&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main id="game-shell">
+    <canvas id="world" aria-label="Mundo 3D de Verdant"></canvas>
+    <div class="vignette"></div>
+
+    <section id="title-screen" class="title-screen">
+      <div class="title-backdrop"></div>
+      <div class="title-content">
+        <div class="eyebrow"><span class="eyebrow-line"></span> UMA AVENTURA DE MUNDO ABERTO <span class="eyebrow-line"></span></div>
+        <h1>VERDANT</h1>
+        <p class="subtitle">Crônicas do Vale</p>
+        <p class="intro">Um mundo esquecido desperta sob seus pés.<br>Explore, reúna recursos e construa seu próprio lar.</p>
+        <div class="class-title">ESCOLHA SEU CAMINHO</div>
+        <div class="class-options">
+          <button class="class-card selected" data-class="guerreiro">
+            <span class="class-icon warrior-icon">✦</span><span class="class-name">Guerreiro</span><span class="class-desc">Lâmina & resistência</span><span class="class-stat">+ VIDA · ESPADA</span>
+          </button>
+          <button class="class-card" data-class="mago">
+            <span class="class-icon mage-icon">✧</span><span class="class-name">Mago</span><span class="class-desc">Magia & descobertas</span><span class="class-stat">+ MANA · ORBE ARCANO</span>
+          </button>
+          <button class="class-card" data-class="arqueira">
+            <span class="class-icon ranger-icon">⌁</span><span class="class-name">Arqueira</span><span class="class-desc">Precisão & agilidade</span><span class="class-stat">+ VELOCIDADE · ARCO</span>
+          </button>
+        </div>
+        <button id="start-button" class="start-button">INICIAR JORNADA <span>→</span></button>
+        <div class="title-foot">SEM PRESSA. SEM DESTINO. SÓ O QUE VOCÊ VAI CRIAR.</div>
+      </div>
+    </section>
+
+    <section id="hud" class="hud hidden">
+      <header class="topbar">
+        <div class="brand-mark"><span class="brand-sun">✧</span><div><strong>VERDANT</strong><small>CRÔNICAS DO VALE</small></div></div>
+        <div class="location"><span class="location-dot"></span><div><strong>VALE DO ALCES</strong><small id="weather-label">MANHÃ SERENA · DIA 01</small></div></div>
+        <button id="sound-button" class="icon-button" aria-label="Alternar som">♫</button>
+      </header>
+      <div class="status-panel">
+        <div class="hero-line"><div id="hero-avatar" class="hero-avatar">✦</div><div><div id="hero-name" class="hero-name">Aventureiro</div><div id="hero-class" class="hero-class">GUERREIRO · NÍVEL 1</div></div></div>
+        <div class="xp-row"><span>XP</span><div class="xp-track"><i id="xp-fill"></i></div><span id="xp-label">0 / 100</span></div>
+        <div class="bar-row health-row"><span class="bar-symbol">♥</span><div class="meter"><i id="health-fill"></i></div><span id="health-label">100</span></div>
+        <div class="bar-row mana-row"><span class="bar-symbol">✧</span><div class="meter"><i id="mana-fill"></i></div><span id="mana-label">100</span></div>
+      </div>
+      <div class="objective"><div class="objective-icon">✧</div><div><small>PRIMEIROS PASSOS</small><span id="objective-text">Colete madeira para começar</span><div class="objective-progress"><i id="objective-fill"></i></div></div><span id="objective-count">0/3</span></div>
+      <div class="resource-panel"><div class="panel-label">MOCHILA <span>·</span> RECURSOS</div><div class="resource-list">
+        <div class="resource" title="Madeira"><span class="resource-icon wood-icon">▰</span><span id="wood-count">0</span></div>
+        <div class="resource" title="Pedra"><span class="resource-icon stone-icon">◆</span><span id="stone-count">0</span></div>
+        <div class="resource" title="Cristal"><span class="resource-icon crystal-icon">♦</span><span id="crystal-count">0</span></div>
+        <div class="resource" title="Fibra"><span class="resource-icon fiber-icon">❋</span><span id="fiber-count">0</span></div>
+      </div></div>
+      <div id="toast" class="toast"></div>
+      <div id="interact-hint" class="interact-hint hidden"><span>F</span> <b>COLETAR</b> <i id="hint-target">Madeira</i></div>
+      <div class="center-reticle"></div>
+      <div class="controls-note"><span>WASD</span> MOVER <span>ESPAÇO</span> PULAR <span>SHIFT</span> CORRER <span>F</span> COLETAR <span>Q</span> HABILIDADE</div>
+      <div class="build-panel"><div class="panel-label">CONSTRUIR</div><div class="build-items">
+        <button class="build-item active" data-build="piso"><span class="build-preview floor-preview"></span><span class="build-copy"><b>Piso de madeira</b><small>3 madeira</small></span><kbd>1</kbd></button>
+        <button class="build-item" data-build="parede"><span class="build-preview wall-preview"></span><span class="build-copy"><b>Parede de pedra</b><small>3 pedra</small></span><kbd>2</kbd></button>
+        <button class="build-item" data-build="fogueira"><span class="build-preview fire-preview">♨</span><span class="build-copy"><b>Fogueira</b><small>2 madeira · 2 pedra</small></span><kbd>3</kbd></button>
+      </div><button id="build-toggle" class="build-toggle"><span>＋</span> MODO CONSTRUÇÃO <kbd>B</kbd></button><div class="build-help">Clique no terreno para posicionar · ESC para sair</div></div>
+      <div class="ability-wrap"><div id="ability-key" class="ability-key">Q</div><div><span id="ability-name">Ímpeto</span><small>HABILIDADE</small></div><div class="ability-cooldown" id="ability-cooldown"></div></div>
+      <div id="combat-message" class="combat-message"></div>
+      <div class="hotbar"><div class="hotbar-slot active"><kbd>1</kbd><span>⚔</span><small>ESPADA</small></div><div class="hotbar-slot"><kbd>2</kbd><span>✧</span><small>MAGIA</small></div><div class="hotbar-slot"><kbd>3</kbd><span>⌁</span><small>ARCO</small></div><div class="hotbar-slot"><kbd>4</kbd><span>▰</span><small>BLOCO</small></div><div class="hotbar-slot"><kbd>5</kbd><span>♨</span><small>ITEM</small></div></div>
+      <div class="mobile-controls"><button id="mobile-left">◀</button><button id="mobile-right">▶</button><button id="mobile-jump">↑</button><button id="mobile-action">F</button></div>
+    </section>
+    <div id="crosshair-prompt" class="crosshair-prompt hidden">Clique para olhar ao redor</div>
+    <div id="notification" class="notification"></div>
+  </main>
+  <script type="module" src="game.js"></script>
+</body>
+</html>
